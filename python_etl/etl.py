@@ -6,17 +6,12 @@ import psycopg2
 client = pymongo.MongoClient("mongodb://root:puquinha1@mongodb")  # Substitua pela URL do seu MongoDB
 db = client["ecommerce"]  # Substitua pelo nome do seu banco de dados
 collection = db["order_reviews"]  # Substitua pelo nome da sua coleção
-
-
 data = list(collection.find())  # Recupere todos os documentos da coleção
 df = pd.DataFrame(data)  # Crie um DataFrame do Pandas com os dados
 
-# Agora você pode trabalhar com os dados do MongoDB usando o DataFrame df
-# Até aqui ta funcionando 
-
 # Conecte-se ao PostgreSQL
-def conecta_db():
-    try:
+def conecta_db_post(): # cria uma função para conectar ao postgre
+    try: 
         con = psycopg2.connect(
           'postgresql://fzin:puquinha@postgres-etl:5432/mydb'
         )
@@ -26,5 +21,7 @@ def conecta_db():
         print(f"Erro na conexão: {str(e)}")
         return None
 
-con = conecta_db()
+con = conecta_db_post() # executa a função
+
+# Até aqui ta funcionando 
 
