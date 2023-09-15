@@ -3,13 +3,14 @@ version: '3.9'
 services: #defina as propriedades do seu servidor Posgres
   postgres:
     image: postgres:latest
-    container_name: postgres
-    ports:
-      - "5432:5432"
+    container_name: postgres-etl
     environment:
       POSTGRES_DB: mydb
+      POSTGRES_USER: fzin
       POSTGRES_PASSWORD: puquinha
-
+    ports:
+      - "5432:5432"  # Mapeie a porta do PostgreSQL, se necessário
+  
     networks:
       - fzin_network   # Aqui associamos o serviço à rede personalizada
 
