@@ -7,6 +7,8 @@ services: #defina as propriedades do seu servidor Posgres
     ports:
       - "5432:5432"
     environment:
+      POSTGRES_DB: mydb
+      POSTGRES_PASSWORD: puquinha
 
     networks:
       - fzin_network   # Aqui associamos o serviço à rede personalizada
@@ -39,4 +41,3 @@ services: #defina as propriedades do seu servidor Posgres
 
 networks: #defina sua rede
   fzin_network:
-

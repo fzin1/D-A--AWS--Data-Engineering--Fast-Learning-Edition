@@ -16,12 +16,20 @@ df = pd.DataFrame(data)  # Crie um DataFrame do Pandas com os dados
 
 # Conecte-se ao PostgreSQL
 def conecta_db():
-  con = psycopg2.connect(host='localhost', 
-                         database='mydb',
-                         user='fzin', 
-                         password='puquinha1')
-  return con
+    try:
+        con = psycopg2.connect(
+            host='localhost',
+            database='mydb',
+            user='root',  # Usuário PostgreSQL definido no seu docker-compose.yml
+            password='puquinha'  # Senha PostgreSQL definida no seu docker-compose.yml
+        )
+        print("Conexão bem-sucedida")
+        return con
+    except Exception as e:
+        print(f"Erro na conexão: {str(e)}")
+        return None
 
-conecta_db()
+con = conecta_db()
+
 
 
