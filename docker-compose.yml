@@ -1,0 +1,42 @@
+version: '3.9'
+
+services: #defina as propriedades do seu servidor Posgres
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    environment:
+
+    networks:
+      - fzin_network   # Aqui associamos o serviço à rede personalizada
+
+  mongodb: #defina as demais propriedades de seu servidor MongoDB. Observe que estamos deixando o volume configurado, pois ele é necessário para inicializar a base e coleção de dados utilizada no projeto
+    image: mongo:latest
+    container_name: mongodb_container
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: puquinha1
+    volumes:
+      - ./mongodb-init/init.js:/docker-entrypoint-initdb.d/init.js:ro
+    networks:
+      - fzin_network   # Aqui associamos o serviço à rede personalizada
+
+  python_app: #defina as propriedades do seu servidor Python
+    build:
+      context: ./python_etl
+      dockerfile: /docker/Dockerfile
+    container_name: python_app
+    depends_on:
+    - mongodb
+    - postgres
+    volumes:
+    - ./python_etl:/app
+    networks:
+      - fzin_network   # Aqui associamos o serviço à rede personalizada
+
+networks: #defina sua rede
+  fzin_network:
+
