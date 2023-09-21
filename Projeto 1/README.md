@@ -19,40 +19,46 @@ Este projeto tem como objetivo a criação de um Data Warehouse no PostgreSQL us
 Para criar meu ambiente de desenvolvimento, configurei o Docker Compose para incluir o MongoDB, o PostgreSQL e o Python. O Docker Compose facilita a definição e execução de vários containers como serviços interconectados. Abaixo está o arquivo ``docker-compose.yml`` configurado para o projeto:
 
 ```yml
-version: '3'
+version: '3.9'
 services:
-  postgres:
+  postgres: # Define as propriedades do PostgreSQL
     image: postgres:latest
-    environment:
-      POSTGRES_DB: mydb
-      POSTGRES_USER: fzin
-      POSTGRES_PASSWORD: puquinha
+    container_name: postgres-etl
+    env_file:
+      - ./config/postgre.env
     ports:
-      - "5432:5432"
+      - 5432:5432
     networks:
-      - etl-network
+      - fzin_network
 
-  mongo:
+  mongodb: # Define as propriedades do MongoDB
     image: mongo:latest
+    container_name: mongodb_container
+    env_file:
+      - ./config/mongo.env
     ports:
-      - "27017:27017"
-    networks:
-      - etl-network
-
-  python-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+      - 27017:27017
     volumes:
-      - ./input:/app/input
-    depends_on:
-      - postgres
-      - mongo
+      - ./mongodb-init/init.js:/docker-entrypoint-initdb.d/init.js:ro
     networks:
-      - etl-network
+      - fzin_network
 
-networks:
-  etl-network:
+  python_app: # Define as propriedades do Python
+    build:
+      context: ./python_etl
+      dockerfile: /docker/Dockerfile
+    container_name: python_app
+    depends_on:
+      - mongodb
+      - postgres
+    volumes:
+      - ./python_etl:/app
+    networks:
+      - fzin_network
+
+networks: # Define a rede
+  fzin_network:
+
 ```
 Neste arquivo, defini três serviços: PostgreSQL, MongoDB e Python, todos conectados à mesma rede chamada ``etl-network``, permitindo que eles se comuniquem entre si.
 
