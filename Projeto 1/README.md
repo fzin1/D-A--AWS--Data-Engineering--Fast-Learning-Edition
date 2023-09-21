@@ -28,7 +28,7 @@ Rode o `docker-compose.yml` com: docker-compose up
 
 ## Autor
 
-Fabrício Ramos
+[Fabrício Ramos](https://github.com/fzin1)
 
 
 ## Notas de Versão
