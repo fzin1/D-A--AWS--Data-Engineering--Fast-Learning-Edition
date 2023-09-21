@@ -60,7 +60,7 @@ networks: # Define a rede
   fzin_network:
 
 ```
-Neste arquivo, defini três serviços: PostgreSQL, MongoDB e Python, todos conectados à mesma rede chamada ``etl-network``, permitindo que eles se comuniquem entre si.
+Neste arquivo, defini três serviços: PostgreSQL, MongoDB e Python, todos conectados à mesma rede chamada ``fzin-network``, permitindo que eles se comuniquem entre si.
 
 ### Configuração das Conexões com Bancos de Dados
 
@@ -83,7 +83,7 @@ Certifique-se de adaptar essas configurações de acordo com as credenciais e in
 
 ### Processo de ETL (Extract, Transform, Load)
 
-O processo de ETL é implementado no arquivo `etl.py`. Extraí dados de arquivos CSV em uma pasta de entrada (./input) e do MongoDB. Em seguida, apliquei transformações necessárias aos dados, como seleção de colunas e mesclagem de dataframes, e carreguei esses dados em tabelas fato e dimensão no PostgreSQL.
+O processo de ETL é implementado no arquivo `etl.py`. Extraí dados de arquivos CSV em uma pasta de entrada (``./input``) e do MongoDB. Em seguida, apliquei transformações necessárias aos dados, como seleção de colunas e mesclagem de dataframes, e carreguei esses dados em tabelas fato e dimensão no PostgreSQL.
 
 Aqui está um exemplo simplificado de como extraí e carreguei dados do MongoDB e de arquivos CSV:
 
