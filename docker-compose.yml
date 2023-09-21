@@ -1,44 +1,40 @@
 version: '3.9'
 
-services: #defina as propriedades do seu servidor Posgres
-  postgres:
+services: 
+  postgres: # define as propriedades do postgres
     image: postgres:latest
     container_name: postgres-etl
-    environment:
-      POSTGRES_DB: mydb
-      POSTGRES_USER: fzin
-      POSTGRES_PASSWORD: puquinha
+    env_file:
+      - ./config/postgre.env
     ports:
-      - "5432:5432"  # Mapeie a porta do PostgreSQL, se necessário
-  
+      - 5432:5432  
     networks:
-      - fzin_network   # Aqui associamos o serviço à rede personalizada
+      - fzin_network  
 
-  mongodb: #defina as demais propriedades de seu servidor MongoDB. Observe que estamos deixando o volume configurado, pois ele é necessário para inicializar a base e coleção de dados utilizada no projeto
+  mongodb: # define as propriedades de mongoDB
     image: mongo:latest
     container_name: mongodb_container
+    env_file:
+      - ./config/mongo.env
     ports:
-      - "27017:27017"
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: puquinha1
+      - 27017:27017    
     volumes:
       - ./mongodb-init/init.js:/docker-entrypoint-initdb.d/init.js:ro
     networks:
-      - fzin_network   # Aqui associamos o serviço à rede personalizada
+      - fzin_network  
 
-  python_app: #defina as propriedades do seu servidor Python
+  python_app: # define as propriedades do python
     build:
       context: ./python_etl
       dockerfile: /docker/Dockerfile
     container_name: python_app
     depends_on:
-    - mongodb
-    - postgres
+      - mongodb
+      - postgres
     volumes:
-    - ./python_etl:/app
+      - ./python_etl:/app
     networks:
-      - fzin_network   # Aqui associamos o serviço à rede personalizada
+      - fzin_network   
 
-networks: #defina sua rede
+networks: #define a rede
   fzin_network:
